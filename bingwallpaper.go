@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"io"
 	"log"
@@ -50,6 +51,10 @@ func getWalls() ([]string, map[string]string, error) {
 
 		walls[wallDate] = wallUrl
 		wallKeys = append(wallKeys, wallDate)
+	}
+
+	if len(wallKeys) == 0 {
+		return nil, nil, errors.New("no wallpapers found")
 	}
 
 	return wallKeys, walls, nil
