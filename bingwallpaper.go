@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"io"
 	"log"
 	"math/rand/v2"
@@ -64,6 +65,11 @@ func setWallPlasma(wallFile string) error {
 }
 
 func main() {
+	randomFlag := flag.Bool("random", false, "select random wallpaper")
+	keepFlag := flag.Bool("keep", false, "preserve the old wallpapers")
+
+	flag.Parse()
+
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
@@ -83,8 +89,7 @@ func main() {
 
 	var d, w string
 
-	args := os.Args
-	if len(args) > 1 && args[1] == "--random" {
+	if *randomFlag {
 		d = wallKeys[rand.IntN(len(wallKeys))]
 		w = walls[d]
 	} else {
@@ -124,11 +129,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, entry := range entries {
-		if entry.Name() != d+".jpg" {
-			err := os.Remove(filepath.Join(wallDir, entry.Name()))
-			if err != nil {
-				log.Fatal(err)
+	if !*keepFlag {
+		for _, entry := range entries {
+			if entry.Name() != d+".jpg" {
+				err := os.Remove(filepath.Join(wallDir, entry.Name()))
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}
