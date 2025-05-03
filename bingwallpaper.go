@@ -124,12 +124,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	entries, err := os.ReadDir(wallDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	if !*keepFlag {
+		entries, err := os.ReadDir(wallDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		for _, entry := range entries {
 			if entry.Name() != d+".jpg" {
 				err := os.Remove(filepath.Join(wallDir, entry.Name()))
