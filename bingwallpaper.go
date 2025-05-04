@@ -100,6 +100,10 @@ func main() {
 	} else {
 		d = time.Now().Format(time.DateOnly)
 		w = walls[d]
+
+		if w == "" {
+			log.Fatal("today's wallpaper not found")
+		}
 	}
 
 	wallFile := filepath.Join(wallDir, d+".jpg")
